@@ -1,11 +1,10 @@
+from .models import ProductEntry
 from django.shortcuts import render
 
 def show_main(request):
-    products = {
-        'produk' : 'Gulfstream G650ER',
-        'harga': 'Rp.15.000.000.000',
-        'deskripsi': 'Pesawat terbang'
-    }
+    products = [
+        ProductEntry(name='Gulfstream G650', price=150000000000, description='Private Jet'),
+    ]
 
     context = {
         'products': products,
