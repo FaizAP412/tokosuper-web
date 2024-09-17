@@ -1,3 +1,5 @@
+### Tugas 1
+
 * Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 > 1. Membuat Proyek Django:
 >Membuat proyek baru dengan menjalankan ``` django-admin startproject tokosuper ```

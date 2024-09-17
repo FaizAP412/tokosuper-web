@@ -4,8 +4,40 @@
     }
 </style>
 
-<div class="center">
-    <h1>{{ app_name }}</h1>
-    <h2>{{ name }} - {{ npm }} - {{class}}</h2>
-    <img src="{{ image }}" alt="Image Description">
-</div>
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{ app_name }}</h1>
+
+<h2>{{ name }} - {{ npm }} - {{class}}</h2>
+
+<img src="{{ image }}" alt="Image Description">
+
+{% if not product_entries %}
+<p>Belum ada data product pada toko super.</p>
+
+{% else %}
+<table>
+  <tr>
+    <th>Product Name</th>
+    <th>Price</th>
+    <th>Description</th>
+  </tr>
+
+  {% for product_entry in product_entries %}
+  <tr>
+    <td>{{product_entry.name}}</td>
+    <td>{{product_entry.price}}</td>
+    <td>{{product_entry.description}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<br />
+
+<a href="{% url 'main:create_product_entry' %}">
+  <button>Add New Product Entry</button>
+</a>
+{% endblock content %}
+
+
