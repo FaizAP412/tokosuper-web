@@ -1,4 +1,4 @@
-### Tugas 1
+### TUGAS 1
 
 * Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 > 1. Membuat Proyek Django:
@@ -44,4 +44,37 @@ def show_main(request):
 > Django dipilih sebagai framework pembelajaran karena didalamnya telah disediakan berbagai fitur bawaan untuk pengembangan perangkat lunak, memiliki kemampuan ORM, dan scalability yang baik. Selain itu, yang utama adalah pendekatan dari konsep MVT.(Model-View-Template).
 * Mengapa model pada Django disebut sebagai ORM?
 > Django disebut dengan ORM karena Django melakukan penyederhanaan pada interaksi kode python dan database, ORM memungkinkan pengembang untuk menulis query SQL dalam bahasa python.
+
+
+### TUGAS 2
+
+* Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
+> Data delivery diperlukan untuk mengirimkan data antara server dan client. Hal ini memungkinkan data ditampilkan secara dinamis dan interaktif kepada pengguna. Aplikasi hanya akan menampilkan konten statis yang tidak dapat diperbarui atau diubah berdasarkan input dari pengguna.
+* Menurutmu, mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
+> 1. JSON lebih baik dibandingkan XML dalam banyak kasus karena lebih mudah dibaca oleh manusia. 
+> 2. JSON menggunakan sintaks yang lebih sederhana dan lebih mudah diparse oleh mesin.
+> 3. JSON lebih efisien dalam ukuran data dan kecepatan parsing.
+> 
+> Sehingga JSON jauh lebih populer dibandingkan XML dalam pengembangan aplikasi web dan API.
+* Jelaskan fungsi dari method is_valid() pada form Django dan mengapa kita membutuhkan method tersebut?
+> Method  is_valid() pada form Django digunakan untuk memeriksa apakah data yang dimasukkan sudah sesuai dengan validasi yang telah ditentukan. Method ini akan memastikan bahwa data yang diterima dari pengguna adalah valid sebelum disimpan ke database.
+* Mengapa kita membutuhkan csrf_token saat membuat form di Django? Apa yang dapat terjadi jika kita tidak menambahkan csrf_token pada form Django? Bagaimana hal tersebut dapat dimanfaatkan oleh penyerang?
+> csrf_token digunakan untuk melindungi aplikasi dari serangan CSRF (Cross-Site Request Forgery). Tanpa csrf_token pada form Django, penyerang dapat membuat permintaan palsu dari situs lain yang akan dijalankan oleh pengguna yang telah login. Hal ini dapat menyebabkan tindakan yang tidak diinginkan seperti perubahan data atau penghapusan data tanpa sepengetahuan pengguna. csrf_token akan meminta token yang valid pada setiap permintaan POST.
+* Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+> * Mempersiapkan skeleton untuk kerangka dari views dan menambahkan directory dari skeleton pada settings.py
+> * Merubah html utama yaitu main.html dengan menyambungkan template skeleton.
+> * Meng-import UUID pada models.py dan menambahkannya pada ProductEntry. Setelah itu, melakukn migrations karena ada perubahan pada models.
+> * Membuat file forms.py, didalamnya terdapat model untuk menerima entry product.
+> * Pada views.py tambahkan forms.py dengan membuat fungsi yang akan memanggil forms.py dan menambahkan datanya pada database.
+> * Membuat file html baru untuk menampilkan forms.py, serta mengubah main.html untuk bisa menampilkan data yang didapat dari form.
+> * Membuat fungsi show_json, show_json_by_id, show_xml, show_xml_by_id untuk bisa mengembalikan data dalam bentuk xml dan json.
+> * Melakukan git add, commit, dan push, untuk memperbarui data pada repository github dan pws.
+
+JSON dan XML di Postman
+![JSON Postman](media/README/Hasil_JSON_Postman.png)
+![JSON by ID Postman](media/README/Hasil_JSON_by_ID_Postman.png)
+![XML Postman](media/README/Hasil_XML_Postman.png)
+![XML by ID Postman](media/README/Hasil_XML_by_ID_Postman.png)
+
+
 
