@@ -1,4 +1,4 @@
-### TUGAS 1
+### TUGAS 2
 
 * Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
 > 1. Membuat Proyek Django:
@@ -46,7 +46,7 @@ def show_main(request):
 > Django disebut dengan ORM karena Django melakukan penyederhanaan pada interaksi kode python dan database, ORM memungkinkan pengembang untuk menulis query SQL dalam bahasa python.
 
 
-### TUGAS 2
+### TUGAS 3
 
 * Jelaskan mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
 > Data delivery diperlukan untuk mengirimkan data antara server dan client. Hal ini memungkinkan data ditampilkan secara dinamis dan interaktif kepada pengguna. Aplikasi hanya akan menampilkan konten statis yang tidak dapat diperbarui atau diubah berdasarkan input dari pengguna.
@@ -77,4 +77,201 @@ JSON dan XML di Postman
 ![XML by ID Postman](media/README/Hasil_XML_by_ID_Postman.png)
 
 
+### TUGAS 4
 
+1. Apa perbedaan antara `HttpResponseRedirect()` dan `redirect()`
+
+   `HttpResponseRedirect` adalah class dari bawaan django yang digunakan untuk membuat respons pengalihan HTTP ke url tertentu
+
+   Contoh:
+   ```
+   response = HttpResponseRedirect(reverse('main:login'))
+   ```
+   `redirect()` adalah fungsi yang ada di dalam library dari Django untuk mempermudah pembuatan response perpindahan halaman.
+
+   Contoh:
+   ```
+   if form.is_valid():
+        form.save()
+        messages.success(request, "Your account has been created successfully")
+        return redirect('main:login')
+    ```
+
+2. Jelaskan cara kerja penghubungan model `Product` dengan `User`!
+
+    Untuk menghubungkan model `ProductEntry` dengan `User` diperlukan `ForeignKey` yang memuat kode unik dari user. `ForeignKey` digunakan untuk membuat hubungan *many-to-one* antara `ProductEntry` dan `User`.
+    Cara untuk melakukan menghubungkan:
+    1. Import model user: Django terlah memiliki model bawaan untuk mengelola pengguna
+       
+       ```
+       from django.contrib.auth.models import User
+       ```
+    2. Mengkonfigurasi ForeignKey: `ForeignKey` perlu didefiniskan untuk mendapatkan spesific user.
+
+        ```
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        ```
+
+
+3. Apa perbedaan antara *authentication* dan *authorization*, apakah yang dilakukan saat pengguna login? Jelaskan bagaimana Django mengimplementasikan kedua konsep tersebut.
+
+
+    **Authentication** adalah proses verifikasi dari identitas user. Dalam proses ini user akan memasukkan kredensial seperti username dan password, kemudian input ini akan diverifikasi dengan data yang disimpan dalam database.
+    **Authorization** adalah proses untuk menentukan akses dari pengguna setelah dilakukan autentikasi. Hal ini berkaitan dengan akses apa yang diperbolehkan dan apa yang tidak diperbolehkan.
+
+    Implementasi Authentication:
+    
+    1. Menggunakan model: ```from django.contrib.auth.models import User```
+    2. Membuat form login:
+        ```
+        def login_user(request):
+        if request.method == "POST":
+            form = AuthenticationForm(request, request.POST)
+
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                response = HttpResponseRedirect(reverse('main:show_main'))
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+
+        else:
+            form = AuthenticationForm(request)
+        context = {'form': form}
+        return render(request, 'login.html', context)
+        ```
+
+    Implementasi Authorization:
+    1. Menggunakan decorator: Decorator yang digunakan pada proyek kali adalah `@login_required`
+        ```
+        @login_required(login_url='/login')
+        def show_main(request):
+        product_entries = ProductEntry.objects.all()
+        ...
+        ...
+        ```
+    2. Cara lain untuk mengimplementasikannya adalah dengan mensetting izin yang ada pada model dari user.
+        ```
+        from django.contrib.auth.models import Permission
+
+        user.user_permissions.add(Permission.objects.get(codename='can_edit'))
+        ```
+4. Bagaimana Django mengingat pengguna yang telah login? Jelaskan kegunaan lain dari *cookies* dan apakah semua *cookies* aman digunakan?
+
+    Cara Django mengingat pengguna setelah login:
+    - Django menyimpan pengguna dengan membuat sesi login baru
+    - Menyimpan waktu terakhir pada cookie browser dan menyimpannya dalam response
+
+    ```
+    if form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        response = HttpResponseRedirect(reverse('main:show_main'))
+        response.set_cookie('last_login', str(datetime.datetime.now()))
+        return response
+    ```        
+    Kegunaan lain dari *cookies*:
+    - Menyimpan preferensi pengguna.
+    - Pelacakan aktivitas pengguna.
+    - Menyimpan token autentikasi yang digunakan pada sistem berbasis token.
+
+    Apakah semua *cookies* aman?
+    
+    **Tidak**, cookies masih memiliki resiko keamanan. Hal ini dapat terjadi apabila cookies tidak dienkripsi dan tidak dilindungi secara benar.
+
+    Cara mengamankan cookies:
+    - Gunakan HTTPS
+    - Enkripsi data sensitif
+    - Gunakan atribut `HttpOnly`
+    
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara *step-by-step* (bukan hanya sekadar mengikuti tutorial).
+    
+    - Membuat fungsi registrasi, login, dan logout
+
+        ```
+        def register(request):
+            form = UserCreationForm()
+
+            if request.method == "POST":
+                form = UserCreationForm(request.POST)
+
+                if form.is_valid():
+                    form.save()
+                    messages.success(request, "Your account has been created successfully")
+                    return redirect('main:login')
+            context = {
+                'form': form,
+            }
+            return render(request, "xregister.html", context)
+        ```
+        ```
+        def login_user(request):
+            if request.method == "POST":
+            form = AuthenticationForm(request, request.POST)
+
+            if form.is_valid():
+                user = form.get_user()
+                login(request, user)
+                response = HttpResponseRedirect(reverse('main:show_main'))
+                response.set_cookie('last_login', str(datetime.datetime.now()))
+                return response
+
+            else:
+                form = AuthenticationForm(request)
+            context = {'form': form}
+            return render(request, 'login.html', context)
+        ```
+
+        ```
+            def logout_user(request):
+                logout(request)
+                response = HttpResponseRedirect(reverse('main:login'))
+                response.delete_cookie('last_login')
+                return redirect('main:login')
+        ```
+
+    - Membuat file `.html` untuk form registrasi dan login dan menambahkan button logout
+    - Melakukan konfigurasi path url pada `urlpatterns` pada `urls.py`
+
+        ```
+        urlpatterns = [
+        ...
+        ...
+        path('login/', login_user, name='login'),
+        path('logout/', logout_user, name='logout'),
+        path('register/', register, name='register'),
+        ...
+        ...
+        ```
+    - Melakukan konfigurasi untuk merestriksi akses pada halaman main.
+        ```
+        @login_required(login_url='/login')
+        ```
+    - Menambahkan aplikasi *cookies* untuk mendapatkan data
+        ```
+        def login_user(request):
+        ...
+        ...
+                if form.is_valid():
+                    ...
+                    ...
+                    response = HttpResponseRedirect(reverse('main:show_main'))
+                    response.set_cookie('last_login', str(datetime.datetime.now()))
+        ...
+        ...
+        ```
+        ```
+        def logout_user(request):
+        ...
+        ...
+        response = HttpResponseRedirect(reverse('main:login'))
+        response.delete_cookie('last_login')
+        ...
+        ...
+        ```
+    - Menghubungkan `ProductEntry` dengan `User`
+        ```
+        class ProductEntry(models.Model):
+            user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+        ```
