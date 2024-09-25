@@ -12,7 +12,7 @@ from django.shortcuts import render, redirect
 
 @login_required(login_url='/login')
 def show_main(request):
-    product_entries = ProductEntry.objects.all()
+    product_entries = ProductEntry.objects.filter(user=request.user)
 
     context = {
         'app_name': 'TokoSuper',
@@ -76,7 +76,7 @@ def register(request):
     context = {
         'form': form,
     }
-    return render(request, "xregister.html", context)
+    return render(request, "register.html", context)
 
 def show_xml(request):
     data = ProductEntry.objects.all()
