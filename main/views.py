@@ -41,6 +41,25 @@ def create_product_entry(request):
 
     return render(request, "create_product_entry.html", context)
 
+def delete_product_entry(request, id):
+    product = ProductEntry.objects.get(pk=id)
+    product.delete()
+    return HttpResponseRedirect(reverse('main:show_main'))
+
+def edit_product_entry(request, id):
+    product = ProductEntry.objects.get(pk=id)
+
+    form = ProductEntryForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+    
+    context = {
+        'form': form,
+    }
+    return render(request, "edit_product_entry.html", context)
+
 def login_user(request):
     if request.method == "POST":
         form = AuthenticationForm(request, request.POST)
@@ -51,6 +70,8 @@ def login_user(request):
             response = HttpResponseRedirect(reverse('main:show_main'))
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
+        else:
+            messages.error(request, "User not found or incorrect password.")
 
     else:
         form = AuthenticationForm(request)

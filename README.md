@@ -275,3 +275,41 @@ JSON dan XML di Postman
             user = models.ForeignKey(User, on_delete=models.CASCADE)
 
         ```
+
+### TUGAS 5
+
+1. Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+    
+    **Urutan prioritas pengambilan CSS selector**
+    1. Inline Style: CSS diterapkan langsung pada elemen HTML menggunakan atribut `style` memiliki prioritas paling tinggi.
+    2. ID Selector: ID selector memiliki prioritas paling tinggi kedua dibandingkan dengan `class`, `atribute`, `tag`. ID selector direpresentasikan dnegan `#id`.
+    3. Class Selector: Class selector berada dibawah dari *inline style* dan ID Selector.
+    4. Element Selector (`p, div, h1`)
+    5. Universal Selector (`*`)
+2. Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+    
+    Responsive design memungkinkan aplikasi web untuk bisa ditampilkan dalam berbagai jenis perangkat, web akan menyesuaikan tampilannya berdasarkan ukuran layar dari perangakat. Sehingga, web bisa diakses oleh berbagai jenis ukuran dan resolusi layar yang berbeda.
+    Contoh:
+    - Sudah menerapkan: Google.com, halaman web sudah menyesuaikan elemen ui dengan ukuran pada berbagai perangkat
+    - Belum menerapkan: SIAK.NG, halaman web hanya memiliki tampilan untuk desktop, sehingga ketika pengguna membuka menggunakan handphone tampilannya akan tetap serupa dengan desktop.
+3. Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+    
+    - Margin: Ruang kosong di laur border dari elemen, gunanya untuk memisahkan antara elemen dengan elemen lainnya pada halaman.
+    - Border: Garis di sekitar padding dan konten elemen.
+    - Padding: Ruang antara konten elemen dengan border-nya.
+4. Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+    - Flexbox: Layout yang fleksibel yang memungkinkan elemen di dalam container untuk disejajarkan secara dinamis dan responsif, ini bisa diimplementasikan secara horizontal atau vertikal. Gunannya untuk layout satu dimensi, baik baris atau kolom.
+    - Grid Layout: Layout dua dimensi yang memungkinkan penataan elemen dalam baris dan kolom secara terstruktur. Berguna untuk tata letak yang kompleks.
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+    1. Melakukan konfigurasi Tailwind untuk digunakan sebagai framework CSS pada aplikasi Django. Proses ini mencakup menambahkan Tailwind ke dalam pengaturan proyek serta menyusun file konfigurasi agar dapat berfungsi dengan baik.
+
+    2. Mengembangkan fitur edit dan hapus produk. Fitur ini memberikan pengguna kemampuan untuk memperbarui atau menghapus data produk dengan mudah, sehingga meningkatkan interaktivitas serta fleksibilitas aplikasi.
+
+    3. Merancang dan membuat komponen navbar dengan menyusun file navbar.html di dalam direktori aplikasi. Navbar ini menjadi elemen navigasi utama yang memudahkan pengguna berpindah antar halaman.
+
+    4. Mengimplementasikan navbar ke berbagai template HTML dalam aplikasi untuk memastikan konsistensi navigasi di seluruh halaman.
+
+    5. Menambahkan file statis, termasuk CSS dan gambar, ke dalam aplikasi. Hal ini mencakup pengorganisasian file dalam struktur direktori yang sesuai agar mudah diakses.
+
+    6. Menerapkan styling menggunakan utility classes dari Tailwind CSS. Dengan ini, desain yang responsif dan modern dapat dicapai tanpa menulis banyak kode CSS manual.
