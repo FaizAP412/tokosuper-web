@@ -5,9 +5,12 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 from django.core import serializers
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.utils.html import strip_tags
 from django.shortcuts import render, redirect
 
 @login_required(login_url='/login')
@@ -20,7 +23,6 @@ def show_main(request):
         'npm': '2306221353',
         'class': 'PBP A',
         'image' : 'https://i0.wp.com/sellallyourstuff.com/wp-content/uploads/2015/10/StickmanWhatToSell.jpg?fit=600%2C298',
-        'product_entries' : product_entries,
         'last_login' : request.COOKIES.get('last_login'),
     }
 
@@ -40,6 +42,26 @@ def create_product_entry(request):
     }
 
     return render(request, "create_product_entry.html", context)
+
+@csrf_exempt
+@require_POST
+def add_product_entry_ajax(request):
+    name = strip_tags(request.POST.get("name"))
+    price = strip_tags(request.POST.get("price"))
+    description = request.POST.get("description")
+    user = request.user
+
+    # Validasi input
+    if not name or not price or not description:
+        return HttpResponse({'success': False, 'error': 'All fields are required'}, status=400)
+
+    # Simpan entri produk baru
+    new_product = ProductEntry(
+        name=name, price=price, description=description, user=user
+    )
+    new_product.save()
+
+    return HttpResponse({'success': True, 'message': 'Product created successfully'}, status=201)
 
 def delete_product_entry(request, id):
     product = ProductEntry.objects.get(pk=id)
@@ -100,7 +122,7 @@ def register(request):
     return render(request, "register.html", context)
 
 def show_xml(request):
-    data = ProductEntry.objects.all()
+    data = ProductEntry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_xml_by_id(request, id):
@@ -108,7 +130,7 @@ def show_xml_by_id(request, id):
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
-    data = ProductEntry.objects.all()
+    data = ProductEntry.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_json_by_id(request, id):

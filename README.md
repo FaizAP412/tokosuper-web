@@ -313,3 +313,84 @@ JSON dan XML di Postman
     5. Menambahkan file statis, termasuk CSS dan gambar, ke dalam aplikasi. Hal ini mencakup pengorganisasian file dalam struktur direktori yang sesuai agar mudah diakses.
 
     6. Menerapkan styling menggunakan utility classes dari Tailwind CSS. Dengan ini, desain yang responsif dan modern dapat dicapai tanpa menulis banyak kode CSS manual.
+
+
+### TUGAS 6
+1. Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+
+    1. Interaktivitas: JavaScript memungkinkan pengembang untuk membuat aplikasi web yang dinamis dan interaktif. Misalnya, JavaScript memungkinkan untuk memperbarui konten halaman tanpa perlu me-refresh halaman sepenuhnya, seperti pada AJAX.
+
+    2. Pengalaman Pengguna yang Lebih Baik: Dengan JavaScript, pengembang dapat membuat fitur yang merespons secara real-time, seperti validasi form di sisi klien, animasi, dan kontrol UI yang lebih baik, sehingga memberikan pengalaman pengguna yang lebih baik.
+
+    3. Asynchronous Processing: JavaScript mendukung asynchronous processing melalui fungsi seperti fetch(), memungkinkan komunikasi dengan server tanpa menghentikan alur kerja di frontend, misalnya mengambil data atau mengirimkan form melalui AJAX tanpa memuat ulang halaman.
+
+    4. Kompatibilitas Lintas Platform: JavaScript adalah bahasa yang didukung oleh semua browser modern, sehingga memungkinkan pengembangan aplikasi web yang kompatibel dengan berbagai perangkat.
+
+    5. Framework dan Library: Pengembang dapat memanfaatkan framework dan library seperti React, Vue, dan Angular untuk mengembangkan aplikasi web yang kompleks dengan lebih cepat dan terstruktur.
+
+2. Jelaskan fungsi dari penggunaan await ketika kita menggunakan fetch()! Apa yang akan terjadi jika kita tidak menggunakan await?
+
+    await digunakan untuk menunggu penyelesaian promise yang dikembalikan oleh fetch(). Dalam hal ini, ketika kita menggunakan fetch() untuk melakukan permintaan HTTP, permintaan ini bersifat asynchronous, dan fetch() mengembalikan sebuah promise.
+
+    - Tanpa await: Jika kita tidak menggunakan await, JavaScript akan mengeksekusi baris berikutnya tanpa menunggu respons dari server. Hasil dari fetch() akan berupa promise yang belum diselesaikan (pending promise), sehingga kita tidak dapat langsung mendapatkan datanya.
+
+    - Dengan await: Saat kita menambahkan await sebelum fetch(), eksekusi akan berhenti sementara hingga fetch() selesai, sehingga kita bisa mendapatkan respons yang sudah diselesaikan dan menggunakannya langsung dalam variabel yang telah disiapkan.
+
+    Contoh:
+    ```
+    const response = await fetch('https://api.example.com/data');
+    const data = await response.json();
+    console.log(data);  // Data yang sudah diambil dari server
+    ```
+    Jika await tidak digunakan, kita hanya akan mendapatkan promise yang belum terselesaikan, bukan datanya.
+
+3. Mengapa kita perlu menggunakan decorator csrf_exempt pada view yang akan digunakan untuk AJAX POST?
+
+    csrf_exempt digunakan untuk mengecualikan suatu view dari mekanisme Cross-Site Request Forgery (CSRF) protection. Dalam aplikasi Django, CSRF digunakan untuk melindungi pengguna dari serangan CSRF, yang memanfaatkan session dan cookie pengguna untuk mengirimkan permintaan yang tidak sah.
+
+    #### Dalam kasus AJAX POST:
+
+    Jika CSRF token tidak dikirimkan atau tidak ada dalam permintaan AJAX, Django akan menolak permintaan tersebut.
+
+    Namun, dalam beberapa situasi, kita mungkin mengirimkan permintaan AJAX tanpa CSRF token (misalnya, ketika menggunakan API eksternal). Dengan menambahkan decorator csrf_exempt, kita menginstruksikan Django untuk tidak memeriksa token CSRF pada view ini.
+
+
+    Namun, penggunaan csrf_exempt harus digunakan dengan hati-hati, karena menonaktifkan proteksi CSRF dapat meningkatkan risiko keamanan. Jika memungkinkan, selalu tambahkan CSRF token dalam request AJAX.
+
+4. Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+
+    Meskipun kita bisa membersihkan input pengguna di frontend (seperti menggunakan JavaScript untuk sanitasi input), tetap penting untuk melakukan pembersihan di backend karena:
+
+    1. Keamanan: Frontend mudah dimanipulasi oleh pengguna, termasuk penyerang. Mereka bisa dengan mudah menonaktifkan validasi atau memodifikasi data yang dikirim ke server. Oleh karena itu, membersihkan input di backend sangat penting untuk mencegah serangan seperti SQL Injection atau XSS (Cross-Site Scripting).
+
+
+    2. Integritas Data: Backend adalah sumber kebenaran utama untuk data. Meskipun frontend dapat membantu dengan validasi awal, backend harus memastikan bahwa hanya data yang valid yang disimpan di database. Ini juga mencegah data yang tidak diinginkan masuk ke dalam sistem.
+
+
+    3. Penggunaan Data di Layanan Lain: Data dari backend sering digunakan untuk layanan lain, seperti API atau analisis. Oleh karena itu, menjaga integritas data sangat penting di sisi backend.
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial)!
+
+    1. AJAX GET untuk Mengambil Data Produk:
+
+        Saya memulai dengan membuat view Django untuk mendapatkan produk (get_product_entries) yang hanya mengembalikan data produk dalam format JSON. Data ini diambil berdasarkan pengguna yang login.
+
+        Di frontend, saya menggunakan JavaScript dengan fetch() dan await untuk mengambil data produk dari endpoint ini. Data tersebut kemudian dirender secara dinamis ke halaman menggunakan innerHTML dengan template card produk yang sudah ditentukan.
+
+
+
+    2. AJAX POST untuk Menambahkan Produk:
+
+        Untuk menambahkan produk, saya membuat view add_product_entry_ajax di Django, yang menangani request POST dan menambahkan produk ke dalam database. Di frontend, saya menggunakan form modal yang memanggil fungsi JavaScript untuk mengirimkan data produk baru menggunakan fetch() (POST). Setelah produk berhasil ditambahkan, form direset, modal ditutup, dan daftar produk di-refresh dengan memanggil ulang AJAX GET.
+
+
+
+    3. Menambahkan Modal untuk Form Produk:
+
+        Modal ini digunakan untuk input produk baru dengan validasi input seperti nama, harga, dan deskripsi. Saya menggunakan JavaScript untuk mengontrol pembukaan dan penutupan modal, serta memastikan form direset setelah berhasil menambahkan produk.
+
+
+
+    4. Pembersihan Input di Backend:
+
+        Selain membersihkan input di frontend dengan validasi sederhana (seperti required), saya juga membersihkan input di backend untuk memastikan data yang masuk ke database aman dan valid.
